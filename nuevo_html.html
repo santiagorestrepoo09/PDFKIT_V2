@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+	</head>
+
+	<style type="text/css">
+    body {
+      background-color: white;
+    }
+    head,
+    title {
+      align-content: center;
+    }
+    table,
+    th,
+    td {
+      border: 1px solid rgb(0, 0, 0);
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    p.EmpresaTitulo {
+      font-family: arial;
+      font-size: 19px;
+      text-align: center;
+			margin: 1px 0;
+    }
+
+    table,
+    th,
+    p.EmpresaContacto {
+      font-family: arial;
+      font-size: 9px;
+      text-align: left;
+			margin: 1px 0;
+    }
+
+    th,
+    td {
+      padding: 10px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table,
+    tr,
+    td.TituloCliente {
+      text-align: center;
+      font-family: arial;
+      font-size: 10px;
+    }
+
+    td.EstadoCuenta {
+      font-weight: bolder;
+      color: black;
+      background: #d9e2f3;
+      font-family: arial;
+      font-size: 11px;
+    }
+
+    table,
+    tr,
+    td.Titulospanel4 {
+      text-align: center;
+      font-family: arial;
+      font-size: 10px;
+    }
+
+		table,body,  tr,   td.FechaCorte{
+			vertical-align: middle;
+      font-size: 10px;
+		}
+
+    table thead th {
+      vertical-align: bottom;
+      font-size: 13px;
+      text-align: center;
+
+			border-bottom: 1px solid #000000;
+    }
+
+		.table td, .table th {
+    vertical-align: top;
+    border-top: 1px solid #000000;
+		}
+
+		.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #000000;
+		}
+
+		.table thead tr.ttulos_Tabla {
+			font-size: 10px;
+      background: #d9e2f3;
+		}
+
+		.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #000000;
+    font-size: 10px;
+		}
+
+    img {
+      vertical-align: middle;
+      border-style: none;
+      width: 125px;
+    }
+  </style>
+
+	<body>
+    <div id="Imprimir">
+      <div class="container my-5 text-center">
+        <div class="mt-5">
+          <table class="table">
+            <td class="stypeImagen">
+              <img
+                src="data:image/png;base64,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"
+              />
+            </td>
+            <td colspan="3">
+              <p class="EmpresaTitulo"><b> MCT S.A.S. </b></p>
+
+              <p class="EmpresaContacto">
+                <b> Persona Contacto Cartera: Ana Conde</b>
+              </p>
+              <p class="EmpresaContacto">
+                <b> Tel. Fijo No.: (57) 601 821 90 82 Ext.: 4705 – 4706 </b>
+              </p>
+              <p class="EmpresaContacto"><b> Celular No.: 323 311 35 00</b></p>
+            </td>
+
+            <tr>
+              <td class="TituloCliente" colspan="3">
+                <b>LOGISTICA S.A.S.</b>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="EstadoCuenta" colspan="3"><b>ESTADO DE CUENTA </b></td>
+            </tr>
+
+            <tr>
+              <td class="Titulospanel4"><b>Fecha de Corte</b></td>
+              <td class="Titulospanel4"><b>Total Estado Cuenta</b></td>
+              <td>$ 192354906.0</td>
+            </tr>
+
+            <tr>
+              <td class = "FechaCorte" rowspan="2" style="vertical-align: middle; font-size: 15px;"> 2022-01-20 </td>
+              <td class="Titulospanel4"><b>Valor Factura Vencidas</b></td>
+              <td>$ 392800.0 </td>
+            </tr>
+
+            <tr>
+              <td class="Titulospanel4"><b>Valor Factura Sin Vencer</b></td>
+              <td>$ 191962106.0 </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+                Estimado Cliente; Si a la fecha de corte de este estado de
+                cuenta, usted ha pagado alguna de las facturas relacionadas,
+                agradecemos nos envíe el soporte de pago al correo electrónico
+                cc, para actualizar su estado de cuenta de manera inmediata.
+              </td>
+            </tr>
+          </table>
+        </div>
+
+          <table class="table">
+            <thead>
+              <tr class=" ttulos_Tabla">
+                <th scope="col">No. Factura Impresa</th>
+                <th scope="col">Fecha Factura</th>
+                <th scope="col">Fecha Vencimiento</th>
+                <th scope="col">Saldo Factura</th>
+                <th scope="col">Días Vencidos y/o Por Vencer</th>
+              </tr>
+            </thead>
+            <tbody id="contenido"></tbody>
+          </table>
+      </div>
+    </div>
+	</body>
+</html>

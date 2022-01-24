@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+			<!-- Bootstrap CSS -->
+					<link
+					rel="stylesheet"
+					href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+					integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+					crossorigin="anonymous"
+				/>
+
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+	</head>
+
+	<style type="text/css">
+    body {
+      background-color: white;
+    }
+    head,
+    title {
+      align-content: center;
+    }
+    table,
+    th,
+    td {
+      border: 1px solid rgb(0, 0, 0);
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    p.EmpresaTitulo {
+      font-family: arial;
+      font-size: 19px;
+      text-align: center;
+			margin: 1px 0;
+    }
+
+    table,
+    th,
+    p.EmpresaContacto {
+      font-family: arial;
+      font-size: 9px;
+      text-align: left;
+			margin: 1px 0;
+    }
+
+    th,
+    td {
+      padding: 10px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table,
+    tr,
+    td.TituloCliente {
+      text-align: center;
+      font-family: arial;
+      font-size: 10px;
+    }
+
+    td.EstadoCuenta {
+      font-weight: bolder;
+      color: black;
+      background: #d9e2f3;
+      font-family: arial;
+      font-size: 11px;
+    }
+
+    table,
+    tr,
+    td.Titulospanel4 {
+      text-align: center;
+      font-family: arial;
+      font-size: 10px;
+    }
+
+		table,body,  tr,   td.FechaCorte{
+			vertical-align: middle;
+      font-size: 10px;
+		}
+
+    table thead th {
+      vertical-align: bottom;
+      font-size: 13px;
+      text-align: center;
+
+			border-bottom: 1px solid #000000;
+    }
+
+		.table td, .table th {
+    vertical-align: top;
+    border-top: 1px solid #000000;
+		}
+
+		.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #000000;
+    font-size: 10px;
+		}
+
+		.table thead tr.titulos_Tabla,
+		.table thead tr.titulos_Tabla th {
+			font-size: 10px;
+      background-color: black;
+			color: blue;
+		}
+
+
+    img {
+      vertical-align: middle;
+      border-style: none;
+      width: 125px;
+			transform: scale3d(1.5, 1.5, 1.5);
+    }
+  </style>
+
+	<body>
+    <div id="Imprimir">
+      <div class="container my-5 text-center">
+        <div class="mt-5">
+          <table class="table">
+            <td class="stypeImagen">
+							{{empresa_imagen}}
+            </td>
+            <td colspan="3">
+              <p class="EmpresaTitulo"><b> {{nombreempresa}} </b></p>
+
+              <p class="EmpresaContacto">
+                <b> Persona Contacto Cartera: Ana Conde</b>
+              </p>
+              <p class="EmpresaContacto">
+                <b> Tel. Fijo No.: (57) 601 821 90 82 Ext.: 4705 – 4706 </b>
+              </p>
+              <p class="EmpresaContacto"><b> Celular No.: 323 311 35 00</b></p>
+            </td>
+
+            <tr>
+              <td class="TituloCliente" colspan="3">
+                <b>{{cliente_nombre1}}</b>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="EstadoCuenta" colspan="3"><b>ESTADO DE CUENTA </b></td>
+            </tr>
+
+            <tr>
+              <td class="Titulospanel4"><b>Fecha de Corte</b></td>
+              <td class="Titulospanel4"><b>Total Estado Cuenta</b></td>
+              <td>$ {{totalestadocuenta}}</td>
+            </tr>
+
+            <tr>
+              <td class = "FechaCorte" rowspan="2" style="vertical-align: middle; font-size: 15px;"> {{fechacorte}} </td>
+              <td class="Titulospanel4"><b>Valor Factura Vencidas</b></td>
+              <td>$ {{valorfacturavencidas}} </td>
+            </tr>
+
+            <tr>
+              <td class="Titulospanel4"><b>Valor Factura Sin Vencer</b></td>
+              <td>$ {{valorfacturasinvencer}} </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+                Estimado Cliente; Si a la fecha de corte de este estado de
+                cuenta, usted ha pagado alguna de las facturas relacionadas,
+                agradecemos nos envíe el soporte de pago al correo electrónico
+                cc, para actualizar su estado de cuenta de manera inmediata.
+              </td>
+            </tr>
+          </table>
+        </div>
+
+          <table class="table">
+            <thead>
+              <tr class=" titulos_Tabla">
+                <th >No. Factura Impresa</th>
+                <th >Fecha Factura</th>
+                <th >Fecha Vencimiento</th>
+                <th >Saldo Factura</th>
+                <th >Días Vencidos y/o Por Vencer</th>
+              </tr>
+            </thead>
+            <tbody id="contenido"></tbody>
+          </table>
+      </div>
+    </div>
+
+		<script> 
+			
+			document-addEventListener('load',()=>{
+				const factura = {{facturas}}
+				tabla(factura);
+			})
+      function tabla(datos) {
+				const contenido = document.querySelector("#contenido");
+        contenido.innerHTML = "";
+        for (let valor of datos) {
+          contenido.innerHTML += `
+						<tr>
+							<td>${valor.prefijo}</td>
+							<td>${valor.fecha_creacion}</td>
+							<td>${valor.fecha_vencimiento}</td>
+							<td style=" text-align: right;" >${valor.saldo}</td>
+							<td>${valor.dias_vencidos}</td>
+						`;
+        }
+	    }
+		</script>
+	</body>
+</html>

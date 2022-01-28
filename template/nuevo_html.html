@@ -26,27 +26,28 @@
     title {
       align-content: center;
     }
-    table,
-    th,
-    td {
-      border: 1px solid rgb(0, 0, 0);
+		.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border: 1px;
+		}
+    table,  th,  td {
+      border: 1px solid black;
       border-collapse: collapse;
     }
 
-    table,
-    th,
-    p.EmpresaTitulo {
+    table, th,  p.EmpresaTitulo {
       font-family: arial;
       font-size: 19px;
       text-align: center;
 			margin: 1px 0;
     }
 
-    table,
-    th,
-    p.EmpresaContacto {
+    table, th, p.EmpresaContacto {
       font-family: arial;
-      font-size: 9px;
+      font-size: 12px;
       text-align: left;
 			margin: 1px 0;
     }
@@ -65,7 +66,7 @@
     td.TituloCliente {
       text-align: center;
       font-family: arial;
-      font-size: 10px;
+      font-size: 14px;
     }
 
     td.EstadoCuenta {
@@ -111,16 +112,18 @@
 		.table thead tr.titulos_Tabla,
 		.table thead tr.titulos_Tabla th {
 			font-size: 10px;
-      background-color: black;
-			color: blue;
+      background-color: #d9e2f3;
+			color: black;
 		}
 
 
     img {
-      vertical-align: middle;
-      border-style: none;
-      width: 125px;
-			transform: scale3d(1.5, 1.5, 1.5);
+      vertical-align: 30px;
+			border-style: none;
+			width: 90px;
+			transform: scale3d(1.5, 1.5, 0.5);
+			height: 50px;
+			margin-top: 30px;
     }
   </style>
 
@@ -130,23 +133,23 @@
         <div class="mt-5">
           <table class="table">
             <td class="stypeImagen">
-							<img src="../img/empresa/MCT.png"/>
+							<img src="../img/MCT S.A.S..png"/>
             </td>
-            <td colspan="3">
-              <p class="EmpresaTitulo"><b> MCT S.A.S. </b></p>
-
-              <p class="EmpresaContacto">
-                <b> Persona Contacto Cartera: Ana Conde</b>
-              </p>
-              <p class="EmpresaContacto">
-                <b> Tel. Fijo No.: (57) 601 821 90 82 Ext.: 4705 – 4706 </b>
-              </p>
-              <p class="EmpresaContacto"><b> Celular No.: 323 311 35 00</b></p>
+            <td colspan="4">
+								<p class="EmpresaTitulo"><b> MCT S.A.S. </b></p>
+								<br>
+								<p class="EmpresaContacto">
+									<b> Persona Contacto Cartera: Ana Conde</b>
+								</p>
+								<p class="EmpresaContacto">
+									<b> Tel. Fijo No.: (57) 601 821 90 82 Ext.: 4705 – 4706 </b>
+								</p>
+								<p class="EmpresaContacto"><b> Celular No.: 323 311 35 00</b></p>
             </td>
 
             <tr>
               <td class="TituloCliente" colspan="3">
-                <b>AVE COLOMBIANA S.A.S</b>
+                <b>LA MUELA SAS</b>
               </td>
             </tr>
 
@@ -157,18 +160,18 @@
             <tr>
               <td class="Titulospanel4"><b>Fecha de Corte</b></td>
               <td class="Titulospanel4"><b>Total Estado Cuenta</b></td>
-              <td>$ 5841000.0</td>
+              <td>$ 15,110,121.00</td>
             </tr>
 
             <tr>
-              <td class = "FechaCorte" rowspan="2" style="vertical-align: middle; font-size: 15px;"> 2022-01-21 </td>
+              <td class = "FechaCorte" rowspan="2" style="vertical-align: middle; font-size: 15px;"> 2022-01-28 </td>
               <td class="Titulospanel4"><b>Valor Factura Vencidas</b></td>
-              <td>$ 0.0 </td>
+              <td>$ 0.00 </td>
             </tr>
 
             <tr>
               <td class="Titulospanel4"><b>Valor Factura Sin Vencer</b></td>
-              <td>$ 5841000.0 </td>
+              <td>$ 15,110,121.00 </td>
             </tr>
 
             <tr>
@@ -176,7 +179,7 @@
                 Estimado Cliente; Si a la fecha de corte de este estado de
                 cuenta, usted ha pagado alguna de las facturas relacionadas,
                 agradecemos nos envíe el soporte de pago al correo electrónico
-                cc, para actualizar su estado de cuenta de manera inmediata.
+                cartera@mct.com.co, para actualizar su estado de cuenta de manera inmediata.
               </td>
             </tr>
           </table>
@@ -194,18 +197,38 @@
             </thead>
             <tbody id="contenido"></tbody>
           </table>
+
       </div>
     </div>
+	</body>
+
+	<footer style="	text-align: center;">
+			<tr style = "margin-top: 166px; text-align: center; font-size: 15px;">
+				<b id="pagina" sytle="font-size: 15px;"> </b>
+			</tr>
+	</footer>
 
 		<script> 
-			
 			document-addEventListener('load',()=>{
-				const factura = [{'prefijo': 'E015-17920', 'fecha_creacion': '2022-01-13', 'fecha_vencimiento': '2022-02-12', 'saldo': '$ 5841000', 'dias_vencidos': -22}]
-				tabla(factura);
+				const factura = [{'prefijo': 'E015-17960', 'fecha_creacion': '2022-01-17', 'fecha_vencimiento': '2022-02-16', 'saldo': '3,382,137.00', 'dias_vencidos': -19}, {'prefijo': 'E013-19924', 'fecha_creacion': '2022-01-17', 'fecha_vencimiento': '2022-02-16', 'saldo': '4,500,984.00', 'dias_vencidos': -19}, {'prefijo': 'E013-19925', 'fecha_creacion': '2022-01-17', 'fecha_vencimiento': '2022-02-16', 'saldo': '7,227,000.00', 'dias_vencidos': -19}]
+				tabla(factura)
 			})
       function tabla(datos) {
 				const contenido = document.querySelector("#contenido");
+				const pagina = document.getElementById("pagina");
         contenido.innerHTML = "";
+				let i = 0
+				let contadorPaginas = 21
+				let paginas = 1
+				let totalPaginas = 0
+				console.log("valor DATOS = "+ datos.length)
+				if (datos.length < 35){
+					totalPaginas = 1
+				}else{
+					console.log("aca")
+					totalPaginas = Math.round(datos.length / 30)
+				}
+				console.log("Valor de division = " + totalPaginas)
         for (let valor of datos) {
           contenido.innerHTML += `
 						<tr>
@@ -215,8 +238,32 @@
 							<td style=" text-align: right;" >${valor.saldo}</td>
 							<td>${valor.dias_vencidos}</td>
 						`;
+						if (i == contadorPaginas ){
+							contenido.innerHTML += `
+							<tr style="height: 5px;"></tr>
+								<tr style=""margin-top: 166px; text-align: center; font-size: 15px;"  >
+									<td colspan="6" style="border: 1px white;"> 
+											<b>${paginas} / ${totalPaginas}</b> 
+										</td>
+								</tr>
+							<br>
+							<br>
+							<br>
+							<br>
+							<br>
+							`;
+						pagina.innerHTML = paginas + "/" +totalPaginas
+							contadorPaginas = contadorPaginas + 33
+							paginas = paginas + 1
+						}
+						console.log(contadorPaginas)
+						i = i + 1;
         }
-	    }
+				if (datos.length < contadorPaginas ){
+							pagina.innerHTML = paginas + " / " +totalPaginas
+						}
+
+			}
 		</script>
-	</body>
+
 </html>

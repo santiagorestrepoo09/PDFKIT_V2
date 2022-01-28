@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import Error
 from jinja2 import Environment, FileSystemLoader
 
-t_host = "192.168.102.24" 
+t_host = "192.168.102.23" 
 t_port = "5432"
 t_name_db = "switrans"
 t_user = "admin"
@@ -12,7 +12,7 @@ db_conn = psycopg2.connect(host=t_host, port=t_port, dbname=t_name_db, user=t_us
 db_cursor = db_conn.cursor()
 
 def Consulta_arrayClientes(rutacss = ''):
-  Sql = "SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where  car.cartera_saldo >= 1 group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
+  Sql = "SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where cl.cliente_codigo in (2, 4, 295,2616, 2331) and  car.cartera_saldo >= 1  group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
   ArrayClientes = []
   ArrayEmpresaNombre = []
   ArrayEmpresaCodigo = []
@@ -32,8 +32,7 @@ def Consulta_arrayClientes(rutacss = ''):
         cliente_codigo = ArrayClientes[im]
         empresa_codigo = ArrayEmpresaCodigo[im]
         DatosClientes = Consultar_DatosClientes(cliente_codigo,empresa_codigo)
-        print('<img src="../img/'+str(ArrayEmpresaNombre[im])+'.png"/>')
-        DatosClientes['empresa_imagen'] = '<img src="../img/'+str(ArrayEmpresaNombre[im])+'.png"/>'
+        DatosClientes['empresa_imagen'] = '<img src="/home/santiago/Escritorio/DEVELOP/PYTHON/Pdfkit/img/MCT S.A.S..png"/>'
         DatosClientes['facturas'] = Consultar_FaturasClientes(cliente_codigo,empresa_codigo)
         print(ArrayClientes[im])
         print(ArrayEmpresaCodigo[im])

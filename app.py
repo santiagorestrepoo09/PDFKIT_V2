@@ -3,7 +3,7 @@ import psycopg2
 from psycopg2 import Error
 from jinja2 import Environment, FileSystemLoader
 
-t_host = "192.168.102.23" 
+t_host = "192.168.102.24" 
 t_port = "5432"
 t_name_db = "switrans"
 t_user = "admin"
@@ -11,32 +11,33 @@ t_pw = "lITOMUvb7k"
 db_conn = psycopg2.connect(host=t_host, port=t_port, dbname=t_name_db, user=t_user, password=t_pw)
 db_cursor = db_conn.cursor()
 
-def Consulta_arrayClientes(rutacss = ''):
-  Sql = "SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where cl.cliente_codigo in (2, 4, 295,2616, 2331) and  car.cartera_saldo >= 1  group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
+def Consulta_arrayClientes():
+  Sql = "SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where  car.cartera_saldo >= 1  group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
   ArrayClientes = []
   ArrayEmpresaNombre = []
   ArrayEmpresaCodigo = []
   try:
       db_cursor.execute(Sql)
       List_Clientes = db_cursor.fetchall()
-      #print(List_Clientes)
+      print("Voy a imprimir  = "+len(List_Clientes)+" PDFs")
       for i in range(len(List_Clientes)):
         for j in range(0,1):
           ArrayClientes.append(List_Clientes[i][j])
           ArrayEmpresaCodigo.append(List_Clientes[i][j+1])
           ArrayEmpresaNombre.append(List_Clientes[i][j+2])
-      print(ArrayClientes)
-      print(ArrayEmpresaCodigo)
+      #print(ArrayClientes)
+      #print(ArrayEmpresaCodigo)
       print(ArrayEmpresaNombre)
       for im in range(len(ArrayClientes)):
         cliente_codigo = ArrayClientes[im]
         empresa_codigo = ArrayEmpresaCodigo[im]
         DatosClientes = Consultar_DatosClientes(cliente_codigo,empresa_codigo)
-        DatosClientes['empresa_imagen'] = '<img src="/home/santiago/Escritorio/DEVELOP/PYTHON/Pdfkit/img/MCT S.A.S..png"/>'
+        print('<img src="../img/'+str(ArrayEmpresaNombre[im])+'.png"/>')
+        DatosClientes['empresa_imagen'] = '<img src="../img/'+str(ArrayEmpresaNombre[im])+'.png"/>'
         DatosClientes['facturas'] = Consultar_FaturasClientes(cliente_codigo,empresa_codigo)
-        print(ArrayClientes[im])
-        print(ArrayEmpresaCodigo[im])
-        print("Entro a generar")
+        #print(ArrayClientes[im])
+        #print(ArrayEmpresaCodigo[im])
+        print("Imprimiento el pdf de " + cliente_codigo + ArrayEmpresaCodigo[im])
         env = Environment(loader = FileSystemLoader("template"))
         template =  env.get_template("index.html")
         html = template.render(DatosClientes)
@@ -60,8 +61,7 @@ def Consulta_arrayClientes(rutacss = ''):
   db_conn.close()
 
 def Consultar_DatosClientes(List_Clientes,empresa_codigo):
-  print("inicio recorrer el Datos clientes")
-  Sql2 = ( f' { " select	te.empresa_nombre as nombreEmpresa,	cl.cliente_nombre1,  substr(now()::text,1,10) as fechacorte,	sum(tc.cartera_saldo) as TotalEstadoCuenta,	(select sum(tc.cartera_saldo) as ValorFacturaVencidas from tb_factura ft left join tb_cartera car on (car.factura_codigo = ft.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_cliente cl on	(cl.cliente_codigo = car.cliente_codigo) where 	cl.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and now()::date-car.cartera_fechacreacion-cl.cliente_diasvencimientofactura > 0 ),	(select sum(tc.cartera_saldo) as ValorFacturaSinVencer from tb_factura ft left join tb_cartera car on (car.factura_codigo = ft.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_cliente cl on	(cl.cliente_codigo = car.cliente_codigo) where 	cl.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and now()::date-car.cartera_fechacreacion-cl.cliente_diasvencimientofactura <= 0 )from tb_factura tf left join tb_cartera car on	(car.factura_codigo = tf.factura_codigo) 	left join tb_cliente cl on (cl.cliente_codigo = car.cliente_codigo)  left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_empresa te on(te.empresa_codigo=tf.empresa_codigo) where car.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and car.cartera_saldo >= 1  GROUP by te.empresa_nombre,cl.cliente_nombre1"}'	)
+  Sql2 = ( f' { " select	te.empresa_nombre as nombreEmpresa,	cl.cliente_nombre1,  substr(now()::text,1,10) as fechacorte,	sum(tc.cartera_saldo) as TotalEstadoCuenta,	(select case when sum(tc.cartera_saldo) is NULL then 0 else sum(tc.cartera_saldo) end  as ValorFacturaVencidas from tb_factura ft left join tb_cartera car on (car.factura_codigo = ft.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_cliente cl on	(cl.cliente_codigo = car.cliente_codigo) where 	cl.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and now()::date-car.cartera_fechacreacion-cl.cliente_diasvencimientofactura > 0 ),	(select  case when sum(tc.cartera_saldo) is NULL then 0 else sum(tc.cartera_saldo) end   as ValorFacturaSinVencer from tb_factura ft left join tb_cartera car on (car.factura_codigo = ft.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_cliente cl on	(cl.cliente_codigo = car.cliente_codigo) where 	cl.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and now()::date-car.cartera_fechacreacion-cl.cliente_diasvencimientofactura <= 0 )from tb_factura tf left join tb_cartera car on	(car.factura_codigo = tf.factura_codigo) 	left join tb_cliente cl on (cl.cliente_codigo = car.cliente_codigo)  left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_empresa te on(te.empresa_codigo=tf.empresa_codigo) where car.cliente_codigo = "}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and car.cartera_saldo >= 1  GROUP by te.empresa_nombre,cl.cliente_nombre1"}'	)
   try:
       db_cursor.execute(Sql2)
       row = db_cursor.fetchone()
@@ -83,7 +83,6 @@ def Consultar_DatosClientes(List_Clientes,empresa_codigo):
 
 
 def Consultar_FaturasClientes(List_Clientes,empresa_codigo):
-  print("inicio recorrer Facturas Clientes")
   StringSqlInicial = " SELECT	tf.factura_empresaprefijo || '' || tc2.cencos_digito || '-' || factura_numerodocumento as prefijo, substr(factura_fechacreacion::text,1,10) as fecha_creacion, 	cast((car.cartera_fechacreacion + cl.cliente_diasvencimientofactura) as text) as fecha_vencimiento,	tc.cartera_saldo as saldo,	now()::date-car.cartera_fechacreacion-cl.cliente_diasvencimientofactura as dias_vencidos from tb_factura tf left join tb_cartera car on	(car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on (cl.cliente_codigo = car.cliente_codigo) where car.cliente_codigo = "
   postgreSQL_cliente = ( f' {StringSqlInicial}{List_Clientes}{" and car.empresa_codigo = "}{empresa_codigo}{" and car.cartera_saldo >= 1  order by dias_vencidos desc"} ' )
   try:
@@ -108,6 +107,4 @@ def Consultar_FaturasClientes(List_Clientes,empresa_codigo):
   db_cursor.close()
   db_conn.close()
 
-if __name__=="__main__":
-  rutacss = '/home/santiago/Escritorio/DEVELOP/PYTHON/Pdfkit/template/style.css'
-  Consulta_arrayClientes(rutacss)
+Consulta_arrayClientes()

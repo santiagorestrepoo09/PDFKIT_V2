@@ -224,9 +224,10 @@
 				console.log("valor DATOS = "+ datos.length)
 				if (datos.length < 35){
 					totalPaginas = 1
+					console.log("totalPaginas" +totalPaginas )
 				}else{
-					console.log("aca")
 					totalPaginas = Math.round(datos.length / 30)
+					console.log("totalPaginas" +totalPaginas )
 				}
 				console.log("Valor de division = " + totalPaginas)
         for (let valor of datos) {
@@ -235,7 +236,7 @@
 							<td>${valor.prefijo}</td>
 							<td>${valor.fecha_creacion}</td>
 							<td>${valor.fecha_vencimiento}</td>
-							<td style=" text-align: right;" >${valor.saldo}</td>
+							<td style=" text-align: right;" >${valor.valorfactura}</td>
 							<td>${valor.dias_vencidos}</td>
 						`;
 						if (i == contadorPaginas ){

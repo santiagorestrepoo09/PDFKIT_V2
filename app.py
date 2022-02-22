@@ -13,7 +13,7 @@ db_conn = psycopg2.connect(host=t_host, port=t_port, dbname=t_name_db, user=t_us
 db_cursor = db_conn.cursor()
 
 def Consulta_arrayClientes():
-  Sql = " SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where  car.cartera_saldo >= 1 and car.empresa_codigo = 1 group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
+  Sql = " SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo) where  car.cartera_saldo >= 1 and cl.cliente_codigo in (609) and car.empresa_codigo = 1 group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre  "
   ArrayClientes = []
   ArrayEmpresaNombre = []
   ArrayEmpresaCodigo = []
@@ -56,6 +56,7 @@ def Consulta_arrayClientes():
             'margin-bottom': '0.01in',
             'margin-left': '0.50in',
             'encoding': "UTF-8",
+            'footer-right': '[page] of [topage]',
         }
         RutaPDf = path_abs +"/pdfs/"
         ruta = (f'{RutaPDf}{cliente_codigo}{"_"}{ArrayEmpresaCodigo[im]}{".pdf"}')

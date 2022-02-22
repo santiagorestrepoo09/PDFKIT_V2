@@ -15,7 +15,8 @@
 				/>
 
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+				<meta name="pdfkit-header_left" content='[page] of [topage]' />
+				<meta name="pdfkit-header_font_name" content='Noto Serif' />
 	</head>
 
 	<style type="text/css">
@@ -223,11 +224,17 @@
 				let totalPaginas = 0
 				console.log("valor DATOS = "+ datos.length)
 				if (datos.length < 35){
-					totalPaginas = 1
-					console.log("totalPaginas" +totalPaginas )
+					if(datos.length > 22){
+						console.log("aca llego ")
+						totalPaginas = 2
+					}else{
+						totalPaginas = 1
+					}
+
+					console.log("totalPaginas = " +totalPaginas )
 				}else{
-					totalPaginas = Math.round(datos.length / 30)
-					console.log("totalPaginas" +totalPaginas )
+					totalPaginas = Math.round(datos.length / 25)
+					console.log("totalPaginas =" +totalPaginas )
 				}
 				console.log("Valor de division = " + totalPaginas)
         for (let valor of datos) {
@@ -260,6 +267,7 @@
 						console.log(contadorPaginas)
 						i = i + 1;
         }
+				console.log("Aca llego total paginas = " + totalPaginas)
 				if (datos.length < contadorPaginas ){
 							pagina.innerHTML = paginas + " / " +totalPaginas
 						}

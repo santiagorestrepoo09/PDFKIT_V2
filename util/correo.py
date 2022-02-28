@@ -10,7 +10,7 @@ class Correo:
 
     current_date = datetime.today().strftime('%Y-%m-%d')
 
-    def send_mail(self,ruta, destinatarios, title,ClienteNombre, EmpresaNombre,EmpresaCodigo):
+    def send_mail(self,ruta, destinatarios,CorreosCopia, title,ClienteNombre, EmpresaNombre,EmpresaDocumento,BancosString):
         print("Ingresa a Enviar Correo!!!!!")
 
         server = smtplib.SMTP(host='correo.mct.com.co',port=25)
@@ -24,42 +24,33 @@ class Correo:
         password = "temporal_2015"
         msg['From'] = "notificaciones@mct.com.co"
         msg['To'] = ",".join(destinatarios)
+        msg['Cc'] = ",".join(CorreosCopia)
         msg['Date'] = formatdate(localtime = True)
-        msg['Subject'] = title + self.current_date
+        msg['Subject'] = title + ", " + ClienteNombre + " - fecha ( " + self.current_date +" )"
+      
+        enviarCorreos = destinatarios + CorreosCopia
 
-
-        if EmpresaCodigo == 1:
-          nit = "830.004.861-4"
-          Cuenta_BancoBogota = "920029113"
-          Cuenta_BancoBancolombia = "03100032005"       
-        elif EmpresaCodigo == 2:
-          nit = "806.002.953-7"
-          Cuenta_BancoBogota = "055063218"
-          Cuenta_BancoBancolombia = "16700000442"
-        elif EmpresaCodigo == 12:
-          nit = "901.051.109-0"
-          Cuenta_BancoBogota = "920029113"
-          Cuenta_BancoBancolombia = "16700000442"
-
-        mail_body = self.set_mail_body(ClienteNombre, EmpresaNombre,nit,Cuenta_BancoBogota,Cuenta_BancoBancolombia)
+        mail_body = self.set_mail_body(ClienteNombre, EmpresaNombre,EmpresaDocumento,BancosString)
         server.starttls()
         server.login(msg['From'], password)
         msg.attach(mail_body)
-        server.sendmail(msg['From'], destinatarios, msg.as_string())
+        server.sendmail(msg['From'], enviarCorreos, msg.as_string())
         server.quit()
 
         print("Correo enviado con exito %s:" % (msg['To']))
+        print("Correo con copia a  %s:" % (msg['Cc']))
 
-    def set_mail_body(sef,ClienteNombre,EmpresaNombre,nit,Cuenta_BancoBogota,Cuenta_BancoBancolombia):
+    def set_mail_body(sef,ClienteNombre,EmpresaNombre,EmpresaDocumento,BancosString):
         body_html = f"""\
                 <html>
                   <head></head>
                   <body>
                     <tr> 
-                      <td><font SIZE='6'> Apreciado Cliente, </font></td>
+                      <td><font SIZE='6'> Apreciado Cliente,  <b> {ClienteNombre} </b> </font></td>
                     </tr>
+                    <br>
                     <tr>
-                      <td><font SIZE='10'><b> {ClienteNombre} </b></font></td>
+                      <td><font SIZE='4'> Nos permitimos compartir el estado general de la cartera para su análisis y programación.  </font></td>
                     </tr>
                     <br>
                     <tr>
@@ -71,24 +62,15 @@ class Correo:
                     </tr>
                     <br>
                     <tr>
-                      <td><font SIZE='12'><b>{EmpresaNombre} </br></font></td>
-                    </tr>
-                    <tr>
-                      <td bgcolor='yellow'><font SIZE='3'><b>Nit No. {nit} </b></font></td>
+                      <td><font SIZE='12'><b>{EmpresaNombre} <br>  Nit No. {EmpresaDocumento}  </b></font></td>
                     </tr>
                     <br>
                     <tr>
-                      <td <font SIZE='3'> Banco de Bogotá - Cuenta Corriente No. {Cuenta_BancoBogota}</font></td>
+                      <td <font SIZE='4'> {BancosString} <br> </font></td>
                     </tr>
-                    <tr>
-                      <td><font SIZE='3'> Bancolombia – Cuenta Corriente No. {Cuenta_BancoBancolombia}</font></td>
-                    </tr>
-
-                    <br>
-                    <br>
                     <br>
                     <tr>
-                      <td><font SIZE='4'>Cualquier inquietud puede comunicarse con nosotros al correo electrónico cartera@mct.com.co </font></td>
+                      <td><font SIZE='4'> Si a la fecha de corte de este extracto, usted ha cancelado alguno de los documentos relacionados, agradecemos nos envíe el soporte de pagos al correo electrónico cartera@mct.com.co y/o facturacion@mct.com.co , para actualizar su estado de cuenta de manera inmediata.  </font></td>
                     </tr>
                     <tr>
                       <td><font SIZE='4'>Cordialmente. </font></td>

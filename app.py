@@ -14,7 +14,7 @@ db_conn = psycopg2.connect(host=t_host, port=t_port, dbname=t_name_db, user=t_us
 db_cursor = db_conn.cursor()
 
 def Consulta_arrayClientes():
-  Sql = " SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre,empresa_documento, 	cl.cliente_emailfacturavencer  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo)  where  car.cartera_saldo >= 1	and car.empresa_codigo in (1,2,12) and cl.cliente_excluir is true group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre,empresa_documento limit 6  "
+  Sql = " SELECT cl.cliente_codigo,car.empresa_codigo , te.empresa_nombre,empresa_documento, 	cl.cliente_emailfacturavencer  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo)  where  car.cartera_saldo >= 1	and car.empresa_codigo in (1,2,12) and cl.cliente_excluir is true and car.cliente_codigo not in (1294,2524,140,2412,1301,625,2329,2372,1848,2739,2484,2493,1929,1993,1369,974,2030,1660,1660,7,2463,2730,2543,2466,2616)  group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre,empresa_documento  "
   ArrayClientes = []
   ArrayEmpresaNombre = []
   ArrayEmpresaCodigo = []
@@ -70,9 +70,10 @@ def Consulta_arrayClientes():
         pdfkit.from_file(RutaAbrir , ruta, options=options)
         recipients = ['david.restrepo@mct.com.co']
         CorreosCopia = ['david.restrepo@mct.com.co']
-        ##CorreosDestino = configure_field(ArrayClienteEmailfacturavencer[im])
+        ##CorreosCopia = ['deysi.orjuela@mct.com.co','ana.conde@mct.com.co','david.restrepo@mct.com.co']
+        correoFuncion = configure_field(ArrayClienteEmailfacturavencer[im])
         ##recipients = CorreosDestino
-        ##print("se envio el correo a = " + str(CorreosDestino))
+        print("se envio el correo a = " + str(correoFuncion))
         title = "ESTADO DE CARTERA "
         Correo().send_mail(ruta, recipients,CorreosCopia, title, ClienteNombre , EmpresaNombre, EmpresaDocumento,BancosString)
         os.remove(ruta)
@@ -147,7 +148,11 @@ def Consultar_BancosEmpresa(empresa_codigo):
   db_conn.close()
 
 def configure_field(field):
-  x = (field.split(','))
+  print("field" + str(field ))
+  if field == '':
+    x = 'sincorreo@mct.com.co'
+  else:
+    x = (field.split(','))
   return x 
 
 Consulta_arrayClientes()

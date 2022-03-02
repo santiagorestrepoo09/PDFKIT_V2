@@ -11,7 +11,6 @@ class Correo:
     current_date = datetime.today().strftime('%Y-%m-%d')
 
     def send_mail(self,ruta, destinatarios,CorreosCopia, title,ClienteNombre, EmpresaNombre,EmpresaDocumento,BancosString):
-        print("Ingresa a Enviar Correo!!!!!")
 
         server = smtplib.SMTP(host='correo.mct.com.co',port=25)
         msg = MIMEMultipart()
@@ -37,8 +36,8 @@ class Correo:
         server.sendmail(msg['From'], enviarCorreos, msg.as_string())
         server.quit()
 
-        print("Correo enviado con exito %s:" % (msg['To']))
-        print("Correo con copia a  %s:" % (msg['Cc']))
+        print("Correo enviado con exito =  %s:" % (msg['To']))
+        print("Correo con copia a =  %s:" % (msg['Cc']))
 
     def set_mail_body(sef,ClienteNombre,EmpresaNombre,EmpresaDocumento,BancosString):
         body_html = f"""\

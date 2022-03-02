@@ -37,9 +37,6 @@ def Consulta_arrayClientes():
           ArrayEmpresaNombre.append(List_Clientes[i][j+4])
           ArrayEmpresaDocumento.append(List_Clientes[i][j+5])
           ArrayClienteEmailfacturavencer.append(List_Clientes[i][j+6])
-      ##print(ArrayclienteNombre)
-      ##print(ArrayFechacorte)
-      ##print(ArrayEmpresaNombre)
       for im in range(len(ArrayClientes)):
         cliente_codigo = ArrayClientes[im]
         empresa_codigo = ArrayEmpresaCodigo[im]
@@ -51,8 +48,6 @@ def Consulta_arrayClientes():
         DatosClientes = ArrayDatosClientes
         DatosClientes['empresa_imagen'] = '<img src="../img/'+str(ArrayEmpresaNombre[im])+'.png"/>'
         ArrayFacturas = Consultar_FaturasClientes(cliente_codigo,empresa_codigo)
-        ##print(ArrayFacturas)
-        
         DatosClientes['totalestadocuenta'] = ArrayFacturas[0]['Total_cuenta']
         DatosClientes['valorfacturavencidas'] = ArrayFacturas[0]['Saldo_diasvencidos']
         DatosClientes['valorfacturasinvencer'] = ArrayFacturas[0]['Saldo_diasSinvencer']
@@ -79,7 +74,6 @@ def Consulta_arrayClientes():
         EmpresaNombre = DatosClientes['nombreempresa']
         EmpresaDocumento = ArrayEmpresaDocumento[im]
         print("Imprimiento el pdf del cliente = " + str(ClienteNombre) +" .. El clienteCodigo es " + str(cliente_codigo)+" y para la empresa = " + str(EmpresaNombre) )
-        print("-------------------------------------------------------------------------------------------")
         RutaPDf = path_abs +"/pdfs/"
         ruta = (f'{RutaPDf}{cliente_codigo}{"_"}{ArrayEmpresaCodigo[im]}{".pdf"}')
         pdfkit.from_file(RutaAbrir , ruta, options=options)
@@ -88,9 +82,10 @@ def Consulta_arrayClientes():
         ##CorreosCopia = ['deysi.orjuela@mct.com.co','ana.conde@mct.com.co','david.restrepo@mct.com.co']
         correoFuncion = configure_field(ArrayClienteEmailfacturavencer[im])
         ##recipients = CorreosDestino
-        print("se envio el correo a = " + str(correoFuncion))
+        print("SE ENVIO EL CORREO A  = " + str(correoFuncion))
         title = "ESTADO DE CARTERA "
         Correo().send_mail(ruta, recipients,CorreosCopia, title, ClienteNombre , EmpresaNombre, EmpresaDocumento,BancosString)
+        print("-------------------------------------------------------------------------------------------")
         os.remove(ruta)
   except psycopg2.Error as error:
     print("Error en la connecting a PostgreSQL", error)
@@ -154,7 +149,6 @@ def Consultar_BancosEmpresa(empresa_codigo):
   db_conn.close()
 
 def configure_field(field):
-  print("field" + str(field ))
   if field == '':
     x = 'sincorreo@mct.com.co'
   else:

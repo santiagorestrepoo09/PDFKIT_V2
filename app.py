@@ -14,7 +14,7 @@ db_conn = psycopg2.connect(host=t_host, port=t_port, dbname=t_name_db, user=t_us
 db_cursor = db_conn.cursor()
 
 def Consulta_arrayClientes():
-  Sql = " SELECT cl.cliente_codigo, 	cl.cliente_nombre1, substr(now()::text,	1,10) as fechacorte, car.empresa_codigo , te.empresa_nombre,empresa_documento, 	cl.cliente_emailfacturavencer  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo)  where  car.cartera_saldo >= 1	and car.empresa_codigo in (1,2,12) and cl.cliente_excluir is true and car.cliente_codigo   in (1848)  group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre,empresa_documento  "
+  Sql = " SELECT cl.cliente_codigo, 	cl.cliente_nombre1, substr(now()::text,	1,10) as fechacorte, car.empresa_codigo , te.empresa_nombre,empresa_documento, 	cl.cliente_emailfacturavencer  from tb_factura tf left join tb_cartera car on (car.factura_codigo = tf.factura_codigo) left join tb_carteracambio tc on (tc.cartera_codigo = car.cartera_codigo) left join tb_centrocosto tc2 on (tc2.cencos_codigo = tf.cencos_codigo) left join tb_cliente cl on 	(cl.cliente_codigo = car.cliente_codigo) left join tb_empresa te on	(te.empresa_codigo = tf.empresa_codigo)  where  car.cartera_saldo >= 1	and car.empresa_codigo in (1,2,12) and cl.cliente_excluir is true   group by cl.cliente_codigo,car.empresa_codigo,te.empresa_nombre,empresa_documento  "
   ArrayClientes = []
   ArrayclienteNombre = []
   ArrayFechacorte = []
